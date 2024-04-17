@@ -30,7 +30,6 @@ var alunos = [
 ];
 
 app.get('/', (req, res) => {
-    console.log('teste');
     res.json(alunos);
 });
 
@@ -98,10 +97,6 @@ app.put('/:ra', (req, res) => {
     }
 });
 
-app.put('/:ra', (req, res) => {
-
-});
-
 app.delete('/', (req, res) => {
     const index = alunos.findIndex(x => x.ra == req.query.ra);
     console.log(index);
@@ -111,6 +106,18 @@ app.delete('/', (req, res) => {
 
     alunos.splice(index, 1);
     res.json(alunos);
+});
+
+app.delete('/:ra', (req, res) => {
+    let ra = req.params.ra;
+
+    index = alunos.findIndex(x => x.ra == ra);
+    if (index < 0) {
+        return res.status(404).send('Aluno não encontrado');
+    }
+
+    delete alunos[index].turma;
+    res.status(200).send('Turma deletada do aluno com sucesso');
 });
 
 app.listen(port, () => {
